@@ -28,7 +28,7 @@ model User {
 model Token {
   id           Int      @id @default(autoincrement())
   user         User     @relation(fields: [userId], references: [id])
-  userId       Int      @unique
+  userId       Int      @unique @map("user_id")
   refreshToken String   @unique @map("refresh_token")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
@@ -39,9 +39,9 @@ model Token {
 model Profile {
   id        Int      @id @default(autoincrement())
   user      User     @relation(fields: [userId], references: [id])
-  userId    Int      @unique
-  name      String
-  iamgeUrl  String?
+  userId    Int      @unique @map("user_id")
+  userName  String   @unique @map("user_name")
+  imageUrl  String?  @map("image_url")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
