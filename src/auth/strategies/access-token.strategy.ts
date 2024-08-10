@@ -5,6 +5,9 @@ import { Request } from 'express';
 export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt-access') {
   constructor() {
     super({
+      /**
+       * Verify access token from cookie
+       */
       jwtFromRequest: ExtractJwt.fromExtractors([(req: Request) => req.cookies.accessToken]),
       secretOrKey: process.env.JWT_ACCESS_SECRET,
     });

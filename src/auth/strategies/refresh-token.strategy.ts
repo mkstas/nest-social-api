@@ -5,6 +5,9 @@ import { Request } from 'express';
 export class RefreshTokenStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
   constructor() {
     super({
+      /**
+       * Verify refresh token from cookie
+       */
       jwtFromRequest: ExtractJwt.fromExtractors([(req: Request) => req.cookies.refreshToken]),
       secretOrKey: process.env.JWT_REFRESH_SECRET,
     });

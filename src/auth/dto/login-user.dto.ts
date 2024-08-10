@@ -1,10 +1,16 @@
 import { IsEmail, IsString, MinLength } from 'class-validator';
 
 export class LoginUserDto {
-  @IsEmail()
+  /**
+   * Email validation rules
+   */
+  @IsEmail({}, { message: 'Неверный формат почты' })
   readonly email: string;
 
-  @IsString()
-  @MinLength(8)
+  /**
+   * Password validation rules
+   */
+  @MinLength(8, { message: 'Длина не менее 8 символов' })
+  @IsString({ message: 'Пароль должен быть строкой' })
   readonly password: string;
 }

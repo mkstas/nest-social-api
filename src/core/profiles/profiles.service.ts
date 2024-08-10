@@ -4,8 +4,14 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ProfilesService {
+  /**
+   * Inject dependencies
+   */
   constructor(private readonly prismaService: PrismaService) {}
 
+  /**
+   * Create and return a new profile
+   */
   async create(dto: CreateProfileDto) {
     return await this.prismaService.profile.create({
       data: {
@@ -15,6 +21,9 @@ export class ProfilesService {
     });
   }
 
+  /**
+   * Find and return profile with user data by user id
+   */
   async findOne(userId: number) {
     return await this.prismaService.profile.findUnique({
       where: { userId },

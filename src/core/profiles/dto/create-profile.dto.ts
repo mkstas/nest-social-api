@@ -1,11 +1,17 @@
-import { IsNumber, IsString, Min, MinLength } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, Min } from 'class-validator';
 
 export class CreateProfileDto {
-  @IsNumber()
-  @Min(1)
+  /**
+   * User id validation rules
+   */
+  @Min(1, { message: 'Минимальное значение должно быть 1' })
+  @IsNumber({}, { message: 'Должен быть числом' })
   readonly userId: number;
 
-  @IsString()
-  @MinLength(1)
+  /**
+   * UserName validation rules
+   */
+  @IsNotEmpty({ message: 'Имя не должно быть пустым' })
+  @IsString({ message: 'Имя должно быть строкой' })
   readonly userName: string;
 }
