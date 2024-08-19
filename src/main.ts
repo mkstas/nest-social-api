@@ -1,13 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
+import { join } from 'path';
 
 async function bootstrap() {
   /**
    * Create nest app
    */
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   /**
    * Enable global Validation Pipe
@@ -32,6 +34,12 @@ async function bootstrap() {
    * Enable cookie
    */
   app.use(cookieParser());
+
+  /**
+   * Enable static assets from uploads (images)
+   */
+
+  app.useStaticAssets(join(__dirname, '..', 'uploads'));
 
   /**
    * Launch the app

@@ -22,7 +22,7 @@ export class ProfilesService {
   }
 
   /**
-   * Find and return profile with user data by user id
+   * Find and return profile with user data
    */
   async findOne(userId: number) {
     return await this.prismaService.profile.findUnique({
@@ -36,5 +36,17 @@ export class ProfilesService {
         },
       },
     });
+  }
+
+  /**
+   * Upload and return profile image url
+   */
+  async uploadImage(userId: number, imageUrl: string) {
+    await this.prismaService.profile.update({
+      where: { userId },
+      data: { imageUrl },
+    });
+
+    return imageUrl;
   }
 }
