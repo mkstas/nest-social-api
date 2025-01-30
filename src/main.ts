@@ -9,7 +9,11 @@ async function bootstrap() {
   /**
    * Create nest app
    */
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    cors: { origin: process.env.CORS_ORIGIN, credentials: true },
+  });
+
+  app.setGlobalPrefix('api');
 
   /**
    * Enable global Validation Pipe

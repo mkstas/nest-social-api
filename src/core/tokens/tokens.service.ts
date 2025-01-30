@@ -132,7 +132,6 @@ export class TokensService {
     await this.prismaService.token.delete({
       where: {
         userId: sub,
-        refreshToken,
       },
     });
   }
