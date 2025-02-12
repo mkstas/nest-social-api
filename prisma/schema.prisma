@@ -21,6 +21,8 @@ model User {
   updatedAt    DateTime @updatedAt @map("updated_at")
   token        Token?
   profile      Profile?
+  post         Post?
+  comment      Comment?
 
   @@map("users")
 }
@@ -46,4 +48,31 @@ model Profile {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("profiles")
+}
+
+model Post {
+  id           Int      @id @default(autoincrement())
+  user         User     @relation(fields: [userId], references: [id])
+  userId       Int      @unique @map("user_id")
+  text         String
+  likeQuantity Int      @map("like_quantity")
+  imageUrl     String?  @map("image_url")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  comment      Comment?
+
+  @@map("posts")
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int      @unique @map("user_id")
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    Int      @unique @map("post_id")
+  message   String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("comments")
 }
