@@ -14,13 +14,13 @@ datasource db {
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
+  userId       Int      @id @default(autoincrement()) @map("user_id")
   email        String   @unique
   passwordHash String   @map("password_hash")
+  userName     String   @map("user_name")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
   token        Token?
-  profile      Profile?
   post         Post?
   comment      Comment?
 
@@ -28,8 +28,8 @@ model User {
 }
 
 model Token {
-  id           Int      @id @default(autoincrement())
-  user         User     @relation(fields: [userId], references: [id])
+  tokenId      Int      @id @default(autoincrement()) @map("token_id")
+  user         User     @relation(fields: [userId], references: [userId])
   userId       Int      @unique @map("user_id")
   refreshToken String   @unique @map("refresh_token")
   createdAt    DateTime @default(now()) @map("created_at")
@@ -38,37 +38,24 @@ model Token {
   @@map("tokens")
 }
 
-model Profile {
-  id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int      @unique @map("user_id")
-  userName  String   @unique @map("user_name")
-  imageUrl  String?  @map("image_url")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@map("profiles")
-}
-
 model Post {
-  id           Int      @id @default(autoincrement())
-  user         User     @relation(fields: [userId], references: [id])
-  userId       Int      @unique @map("user_id")
-  text         String
-  likeQuantity Int      @map("like_quantity")
-  imageUrl     String?  @map("image_url")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
-  comment      Comment?
+  postId        Int      @id @default(autoincrement()) @map("post_id")
+  user          User     @relation(fields: [userId], references: [userId])
+  userId        Int      @unique @map("user_id")
+  content       String
+  likesQuantity Int      @map("likes_quantity")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  comment       Comment?
 
   @@map("posts")
 }
 
 model Comment {
-  id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
+  commentId Int      @id @default(autoincrement()) @map("comment_id")
+  user      User     @relation(fields: [userId], references: [userId])
   userId    Int      @unique @map("user_id")
-  post      Post     @relation(fields: [postId], references: [id])
+  post      Post     @relation(fields: [postId], references: [postId])
   postId    Int      @unique @map("post_id")
   message   String
   createdAt DateTime @default(now()) @map("created_at")
