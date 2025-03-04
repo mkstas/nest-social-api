@@ -1,6 +1,6 @@
 import { IsEmail, IsString, MinLength } from 'class-validator';
 
-export class CreateUseDto {
+export class CreateUserDto {
   @IsEmail({})
   readonly email: string;
 
