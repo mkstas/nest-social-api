@@ -21,7 +21,7 @@ export class TokensService {
   async generateRefreshToken(dto: GenerateTokenDto): Promise<string> {
     const refreshToken = await this.jwtService.signAsync(
       { sub: dto.sub, email: dto.email },
-      { secret: process.env.JWT_ACCESS_SECRET, expiresIn: '30d' },
+      { secret: process.env.JWT_REFRESH_SECRET, expiresIn: '30d' },
     );
     return refreshToken;
   }
@@ -31,6 +31,7 @@ export class TokensService {
   ): Promise<{ accessToken: string; refreshToken: string }> {
     const accessToken = await this.generateAccessToken(dto);
     const refreshToken = await this.generateRefreshToken(dto);
+    await this.updateOrSaveRefreshToken(refreshToken);
     return { accessToken, refreshToken };
   }
 
@@ -57,7 +58,7 @@ export class TokensService {
       where: { userId: sub },
     });
     if (!previousToken) return await this.saveRefreshToken(refreshToken);
-    return await this.updateOrSaveRefreshToken(refreshToken);
+    return await this.updateRefreshToken(refreshToken);
   }
 
   async deleteRefreshToken(refreshToken: string): Promise<boolean> {

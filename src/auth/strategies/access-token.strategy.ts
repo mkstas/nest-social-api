@@ -6,7 +6,7 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt-access'
   constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
-        (req: JwtRequest): string => req.cookies.accessToke,
+        (req: JwtRequest): string => req.cookies.accessToken,
       ]),
       secretOrKey: process.env.JWT_ACCESS_SECRET,
     });

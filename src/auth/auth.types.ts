@@ -1,6 +1,6 @@
 export interface JwtRequest extends Request {
   cookies: {
-    accessToke: string;
+    accessToken: string;
     refreshToken: string;
   };
 }

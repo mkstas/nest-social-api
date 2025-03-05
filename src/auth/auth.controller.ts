@@ -22,7 +22,7 @@ import { JwtRequest } from './auth.types';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('regiser')
+  @Post('register')
   @HttpCode(HttpStatus.CREATED)
   async register(
     @Body() dto: RegisterUserDto,
@@ -30,7 +30,7 @@ export class AuthController {
   ): Promise<boolean> {
     const tokens = await this.authService.register(dto);
     this.setCookieWithToken(res, 'accessToken', tokens.accessToken, 60 * 10);
-    this.setCookieWithToken(res, 'refreshToken', tokens.accessToken, 60 * 60 * 24 * 30);
+    this.setCookieWithToken(res, 'refreshToken', tokens.refreshToken, 60 * 60 * 24 * 30);
     return true;
   }
 
@@ -42,7 +42,7 @@ export class AuthController {
   ): Promise<boolean> {
     const tokens = await this.authService.login(dto);
     this.setCookieWithToken(res, 'accessToken', tokens.accessToken, 60 * 10);
-    this.setCookieWithToken(res, 'refreshToken', tokens.accessToken, 60 * 60 * 24 * 30);
+    this.setCookieWithToken(res, 'refreshToken', tokens.refreshToken, 60 * 60 * 24 * 30);
     return true;
   }
 
@@ -79,6 +79,6 @@ export class AuthController {
   }
 
   private setCookieWithToken(res: Response, name: string, token: string, maxAge: number): void {
-    res.cookie(name, token, { httpOnly: true, maxAge: maxAge * 1000 });
+    res.cookie(name, token, { httpOnly: true, secure: true, maxAge: maxAge * 1000 });
   }
 }
