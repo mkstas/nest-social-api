@@ -19,7 +19,7 @@ export class PostsService {
   async findAll(): Promise<Post[]> {
     const posts = await this.prismaService.post.findMany({
       where: { isHidden: false },
-      include: { like: true },
+      include: { like: true, comment: true },
     });
     return posts;
   }
