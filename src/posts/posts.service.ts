@@ -1,8 +1,9 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePostDto } from './dto/create-post.dto';
-import { Post } from '@prisma/client';
+import { Like, Post } from '@prisma/client';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { LikePostDto } from './dto/like-post.dto';
 
 @Injectable()
 export class PostsService {
@@ -16,13 +17,17 @@ export class PostsService {
   }
 
   async findAll(): Promise<Post[]> {
-    const posts = await this.prismaService.post.findMany();
+    const posts = await this.prismaService.post.findMany({
+      where: { isHidden: false },
+      include: { like: true },
+    });
     return posts;
   }
 
   async findOne(postId: number): Promise<Post> {
     const post = await this.prismaService.post.findUnique({
-      where: { postId },
+      where: { postId, isHidden: false },
+      include: { like: true },
     });
     if (!post) throw new NotFoundException('Post is not found');
     return post;
@@ -39,7 +44,23 @@ export class PostsService {
   }
 
   async hide(postId: number, userId: number): Promise<boolean> {
-    await this.update(postId, userId, { isHidden: false });
+    await this.update(postId, userId, { isHidden: true });
     return true;
+  }
+
+  async like(dto: LikePostDto): Promise<Like> {
+    let like = await this.prismaService.like.findFirst({
+      where: { ...dto },
+    });
+    if (!like) {
+      like = await this.prismaService.like.create({
+        data: { ...dto },
+      });
+    } else {
+      await this.prismaService.like.deleteMany({
+        where: { postId: dto.postId },
+      });
+    }
+    return like;
   }
 }

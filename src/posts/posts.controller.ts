@@ -6,13 +6,14 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Req,
   UseGuards,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Post as PostType } from '@prisma/client';
+import { Like, Post as PostType } from '@prisma/client';
 import { AccessTokenGuard } from 'src/auth/guards/access-token.guard';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostsService } from './posts.service';
@@ -44,7 +45,7 @@ export class PostsController {
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  async findOne(@Param('id') postId: number): Promise<PostType> {
+  async findOne(@Param('id', ParseIntPipe) postId: number): Promise<PostType> {
     const post = await this.postsService.findOne(postId);
     return post;
   }
@@ -53,7 +54,7 @@ export class PostsController {
   @UseGuards(AccessTokenGuard)
   @HttpCode(HttpStatus.OK)
   async update(
-    @Param('id') postId: number,
+    @Param('id', ParseIntPipe) postId: number,
     @Req() req: JwtRequest,
     @Body() dto: UpdatePostDto,
   ): Promise<PostType> {
@@ -62,10 +63,19 @@ export class PostsController {
     return post;
   }
 
+  @Get('like/:id')
+  @UseGuards(AccessTokenGuard)
+  @HttpCode(HttpStatus.OK)
+  async like(@Param('id', ParseIntPipe) postId: number, @Req() req: JwtRequest): Promise<Like> {
+    const { sub } = this.jwtService.decode<{ sub: number }>(req.cookies.accessToken);
+    const like = await this.postsService.like({ postId, userId: sub });
+    return like;
+  }
+
   @Delete(':id')
   @UseGuards(AccessTokenGuard)
   @HttpCode(HttpStatus.OK)
-  async hide(@Param('id') postId: number, @Req() req: JwtRequest): Promise<boolean> {
+  async hide(@Param('id', ParseIntPipe) postId: number, @Req() req: JwtRequest): Promise<boolean> {
     const { sub } = this.jwtService.decode<{ sub: number }>(req.cookies.accessToken);
     await this.postsService.hide(postId, sub);
     return true;
