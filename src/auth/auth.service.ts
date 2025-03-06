@@ -30,7 +30,7 @@ export class AuthService {
   async login(dto: LoginUserDto): Promise<{ accessToken: string; refreshToken: string }> {
     const user = await this.usersService.findOne(dto.email);
     const passwordMatch = await bcrypt.compare(dto.password, user.passwordHash);
-    if (!passwordMatch) throw new UnauthorizedException('Неверный логин или пароль');
+    if (!passwordMatch) throw new UnauthorizedException('Incorrect email or password');
     const { accessToken, refreshToken } = await this.tokensService.generateTokens({
       email: user.email,
       sub: user.userId,

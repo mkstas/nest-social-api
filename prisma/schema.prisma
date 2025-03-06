@@ -43,7 +43,8 @@ model Post {
   user          User     @relation(fields: [userId], references: [userId])
   userId        Int      @unique @map("user_id")
   content       String
-  likesQuantity Int      @map("likes_quantity")
+  likesQuantity Int      @default(0) @map("likes_quantity")
+  isHidden      Boolean  @default(false) @map("is_hidden")
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
   comment       Comment?
