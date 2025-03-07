@@ -21,7 +21,7 @@ model User {
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime  @updatedAt @map("updated_at")
   token        Token?
-  post         Post[]
+  article      Article[]
   comment      Comment[]
   like         Like[]
 
@@ -39,8 +39,8 @@ model Token {
   @@map("tokens")
 }
 
-model Post {
-  postId    Int       @id @default(autoincrement()) @map("post_id")
+model Article {
+  articleId Int       @id @default(autoincrement()) @map("articleId")
   user      User      @relation(fields: [userId], references: [userId])
   userId    Int       @map("user_id")
   content   String
@@ -50,16 +50,17 @@ model Post {
   comment   Comment[]
   like      Like[]
 
-  @@map("posts")
+  @@map("articles")
 }
 
 model Comment {
   commentId Int      @id @default(autoincrement()) @map("comment_id")
   user      User     @relation(fields: [userId], references: [userId])
   userId    Int      @map("user_id")
-  post      Post     @relation(fields: [postId], references: [postId])
-  postId    Int      @map("post_id")
+  article   Article  @relation(fields: [articleId], references: [articleId])
+  articleId Int      @map("articleId")
   message   String
+  isHidden  Boolean  @default(false) @map("is_hidden")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -70,8 +71,8 @@ model Like {
   like_id   Int      @id @default(autoincrement()) @map("like_id")
   user      User     @relation(fields: [userId], references: [userId])
   userId    Int      @map("user_id")
-  post      Post     @relation(fields: [postId], references: [postId])
-  postId    Int      @map("post_id")
+  article   Article  @relation(fields: [articleId], references: [articleId])
+  articleId Int      @map("articleId")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 

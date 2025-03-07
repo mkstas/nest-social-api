@@ -1,21 +1,23 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './prisma/prisma.module';
-import { UsersModule } from './users/users.module';
-import { TokensModule } from './tokens/tokens.module';
 import { AuthModule } from './auth/auth.module';
-import { PostsModule } from './posts/posts.module';
-import { CommentsModule } from './comments/comments.module';
+import { UsersModule } from './core/users/users.module';
+import { TokensModule } from './core/tokens/tokens.module';
+import { ArticlesModule } from './core/articles/articles.module';
+import { CommentsModule } from './core/comments/comments.module';
+import { LikesModule } from './core/likes/likes.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     PrismaModule,
+    AuthModule,
     UsersModule,
     TokensModule,
-    AuthModule,
-    PostsModule,
+    ArticlesModule,
     CommentsModule,
+    LikesModule,
   ],
 })
 export class AppModule {}
