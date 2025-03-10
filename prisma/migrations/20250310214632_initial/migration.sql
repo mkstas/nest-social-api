@@ -39,6 +39,7 @@ CREATE TABLE "comments" (
     "user_id" INTEGER NOT NULL,
     "articleId" INTEGER NOT NULL,
     "message" TEXT NOT NULL,
+    "is_hidden" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
