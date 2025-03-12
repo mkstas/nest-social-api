@@ -23,6 +23,12 @@ export class ArticlesService {
     const articles = await this.prismaService.article.findMany({
       where: { isHidden: false },
       include: {
+        user: {
+          select: {
+            userId: true,
+            userName: true,
+          },
+        },
         like: true,
         comment: {
           include: {

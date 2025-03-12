@@ -43,6 +43,7 @@ model Article {
   articleId Int       @id @default(autoincrement()) @map("articleId")
   user      User      @relation(fields: [userId], references: [userId])
   userId    Int       @map("user_id")
+  title     String
   content   String
   isHidden  Boolean   @default(false) @map("is_hidden")
   createdAt DateTime  @default(now()) @map("created_at")
@@ -58,7 +59,7 @@ model Comment {
   user      User     @relation(fields: [userId], references: [userId])
   userId    Int      @map("user_id")
   article   Article  @relation(fields: [articleId], references: [articleId])
-  articleId Int      @map("articleId")
+  articleId Int      @map("article_Id")
   message   String
   isHidden  Boolean  @default(false) @map("is_hidden")
   createdAt DateTime @default(now()) @map("created_at")
@@ -72,7 +73,7 @@ model Like {
   user      User     @relation(fields: [userId], references: [userId])
   userId    Int      @map("user_id")
   article   Article  @relation(fields: [articleId], references: [articleId])
-  articleId Int      @map("articleId")
+  articleId Int      @map("article_Id")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
