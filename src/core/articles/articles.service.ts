@@ -77,7 +77,7 @@ export class ArticlesService {
     if (!like) {
       like = await this.likesService.create({ userId, articleId });
     } else {
-      await this.likesService.remove(articleId);
+      await this.likesService.remove(userId, articleId);
     }
     return like;
   }

@@ -21,9 +21,9 @@ export class LikesService {
     return like;
   }
 
-  async remove(articleId: number): Promise<void> {
+  async remove(userId: number, articleId: number): Promise<void> {
     await this.prismaService.like.deleteMany({
-      where: { articleId },
+      where: { userId, articleId },
     });
   }
 }

@@ -19,6 +19,7 @@ import { JwtPayload, JwtRequest } from 'src/types/jwt.types';
 import { ArticlesService } from './articles.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
+import { CreateArticleLikeDto } from './dto/create-article-like.dto';
 
 @Controller('articles')
 export class ArticlesController {
@@ -68,15 +69,12 @@ export class ArticlesController {
     return article;
   }
 
-  @Get('like/:id')
+  @Post('like')
   @UseGuards(AccessTokenGuard)
   @HttpCode(HttpStatus.OK)
-  async likeArticle(
-    @Param('id', ParseIntPipe) articleId: number,
-    @Req() req: JwtRequest,
-  ): Promise<Like> {
+  async likeArticle(@Body() dto: CreateArticleLikeDto, @Req() req: JwtRequest): Promise<Like> {
     const { sub } = this.jwtService.decode<JwtPayload>(req.cookies.accessToken);
-    const like = await this.articlesService.likeArticle(sub, articleId);
+    const like = await this.articlesService.likeArticle(sub, dto.articleId);
     return like;
   }
 }
